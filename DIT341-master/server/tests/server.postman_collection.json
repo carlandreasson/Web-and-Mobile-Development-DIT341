@@ -1,0 +1,1246 @@
+{
+	"info": {
+		"_postman_id": "35efc70f-8ce9-4244-9ae1-b6df65c5a827",
+		"name": "server",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET/api",
+			"item": [
+				{
+					"name": "GET /api",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "POST",
+			"item": [
+				{
+					"name": "POST new customer",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Stores in a variable the json response",
+									"var jsonData = pm.response.json();",
+									"//Stores the ID of the json object into another variable",
+									"var customerID = jsonData._id;",
+									"",
+									"//Sets the value of the customerId variable declared in the environment to the _id value from the json file included in the HTML response",
+									"pm.environment.set(\"customerId\", customerID);",
+									"",
+									"//Tests whereas the status code returned in the function is 201",
+									"pm.test(\"Status code is 201\", function(){",
+									"    pm.response.to.have.status(201);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\"name\": \"John\",\n\"phone\": 728741759\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/customers",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a new restaurant",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Save response data in environment variable\r",
+									"var jsonData = pm.response.json();\r",
+									"var restaurantId = jsonData._id\r",
+									"pm.environment.set(\"restaurant_id\", restaurantId);\r",
+									"\r",
+									"// Use variable in later requests via {{variable}}\r",
+									"// GET {{host}}/api/restaurants/{{restaurant_id}}\r",
+									"var getRestaurantId = pm.variables.get(\"restaurant_id\");\r",
+									"\r",
+									"// Test assertion examples\r",
+									"pm.test(\"Status code is 201\", function() {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Restaurant has correct name and location\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.name).to.eql(\"BeerBeerBarBar\");\r",
+									"    pm.expect(jsonData.location).to.eql({ street : \"Restaurant Street\", number : 346, city : \"Gothenburg\"});\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Restaurant has _id\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData._id).to.be.a('String');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"BeerBeerBarBar\",\r\n    \"location\": {\r\n        \"street\": \"Restaurant Street\",\r\n        \"number\": 346,\r\n        \"city\": \"Gothenburg\"\r\n    }\r\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api/restaurants",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"restaurants"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST new table",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var newTable = pm.response.json();",
+									"var newTableId = newTable._id;",
+									"",
+									"pm.environment.set(\"tableId\", newTableId);",
+									"",
+									"pm.test(\"Status code is 201\", function(){",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\"number\": 2,\n\"seats\": 12,\n\"available\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/restaurants/{{restaurant_id}}/tables",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"restaurants",
+								"{{restaurant_id}}",
+								"tables"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST new reservation",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Stores in a variable the json response\r",
+									"var jsonData = pm.response.json();\r",
+									"//Stores the ID of the json object into another variable\r",
+									"var reservationID = jsonData._id;\r",
+									"\r",
+									"//Sets the value of the customerId variable declared in the environment to the _id value from the json file included in the HTML response\r",
+									"pm.environment.set(\"reservationID\", reservationID);\r",
+									"\r",
+									"//Tests whereas the status code returned in the function is 201\r",
+									"pm.test(\"Status code is 201\", function(){\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"customer\": \"{{customerId}}\",\r\n\"restaurant\":\"{{restaurant_id}}\",\r\n\"table\": \"{{tableId}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/customers/{{customerId}}/reservations",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"customers",
+								"{{customerId}}",
+								"reservations"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "GET",
+			"item": [
+				{
+					"name": "GET all customers",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function(){",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/customers",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET a specific customer (ID based)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function(){",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/customers/{{customerId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"customers",
+								"{{customerId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search for restaurants",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function(){",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/restaurants",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"restaurants"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get a specific restaurant",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function(){",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/restaurants/{{restaurant_id}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"restaurants",
+								"{{restaurant_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET all tables of a given restaurant Copy",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function(){",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/restaurants/{{restaurant_id}}/tables",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"restaurants",
+								"{{restaurant_id}}",
+								"tables"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET all tables of a given restaurant SORTED by number of seats (descending)",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function(){",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/restaurants/{{restaurant_id}}/tables?sort=-seats",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"restaurants",
+								"{{restaurant_id}}",
+								"tables"
+							],
+							"query": [
+								{
+									"key": "sort",
+									"value": "-seats"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET a specific table (ID based)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function(){",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/restaurants/{{restaurant_id}}/tables/{{tableId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"restaurants",
+								"{{restaurant_id}}",
+								"tables",
+								"{{tableId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET all reservations for a given customer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/customers/{{customerId}}/reservations",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"customers",
+								"{{customerId}}",
+								"reservations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET a specific reservationID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/customers/{{customerId}}/reservations/{{reservationID}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"customers",
+								"{{customerId}}",
+								"reservations",
+								"{{reservationID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PUT",
+			"item": [
+				{
+					"name": "Update an existing table",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"number\": 5,\r\n    \"seats\": 8,\r\n    \"available\": false,\r\n    \"restaurant\": \"615717accfdf413b2c5e5e57\",\r\n    \"__v\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/restaurants/{{restaurant_id}}/tables/{{tableId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"restaurants",
+								"{{restaurant_id}}",
+								"tables",
+								"{{tableId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update an existing restaurant",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"New Name after PUT\",\n    \"location\": {\n        \"street\": \"PUT Street\",\n        \"number\": 55,\n        \"city\": \"PUTenburg\"\n    },\n    \"tables\": []\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/restaurants/{{restaurant_id}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"restaurants",
+								"{{restaurant_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PATCH",
+			"item": [
+				{
+					"name": "PATCH a specific customer on all variables",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Stores in a variable the json response",
+									"var responseJsonData = pm.response.json();",
+									"//Stores the ID of the json object into another variable",
+									"var customerID = responseJsonData._id;",
+									"var requestName = \"Karl\";",
+									"var responseName = responseJsonData.name;",
+									"",
+									"var requestPhone = '1234';",
+									"var responsePhone = responseJsonData.phone;",
+									"",
+									"pm.test(\"Name and phone number updated successfully\", function(){",
+									"    pm.expect(requestName).to.eql(responseName);",
+									"    pm.expect(requestPhone).to.eql(responsePhone);",
+									"});",
+									"",
+									"pm.test(\"Status code is 200\", function(){",
+									"    pm.response.to.have.status(200);",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\"name\": \"Karl\",\n\"phone\": 1234\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api/customers/{{customerId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"customers",
+								"{{customerId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PATCH a specific table on all variables",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Stores in a variable the json response",
+									"var responseJsonData = pm.response.json();",
+									"//Stores the ID of the json object into another variable",
+									"var tableID = responseJsonData._id;",
+									"var requestNumber = 4;",
+									"var responseNumber = responseJsonData.number;",
+									"",
+									"var requestSeat = 2;",
+									"var responseSeat = responseJsonData.seats;",
+									"",
+									"var requestAvailable = true;",
+									"var responseAvailable = responseJsonData.available; ",
+									"",
+									"pm.test(\"Number, Seats and Availability successfully updated\", function(){",
+									"    pm.expect(requestNumber).to.eql(responseNumber);",
+									"    pm.expect(requestSeat).to.eql(responseSeat);",
+									"    pm.expect(requestAvailable).to.eql(responseAvailable);",
+									"});",
+									"",
+									"pm.test(\"Status code is 200\", function(){",
+									"    pm.response.to.have.status(200);",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\"number\": 4,\n\"seats\": 2,\n\"available\": true\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api/restaurants/{{restaurant_id}}/tables/{{tableId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"restaurants",
+								"{{restaurant_id}}",
+								"tables",
+								"{{tableId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "DELETE",
+			"item": [
+				{
+					"name": "DELETE reservation",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function(){",
+									"    pm.response.to.have.status(200);",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/customers/{{customerId}}/reservations/{{reservationID}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"customers",
+								"{{customerId}}",
+								"reservations",
+								"{{reservationID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE all reservation for given customer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function(){",
+									"    pm.response.to.have.status(200);",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/customers/{{customerId}}/reservations",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"customers",
+								"{{customerId}}",
+								"reservations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE a specific table (ID based)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function(){",
+									"    pm.response.to.have.status(200);",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/restaurants/{{restaurant_id}}/tables/{{tableId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"restaurants",
+								"{{restaurant_id}}",
+								"tables",
+								"{{tableId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE all tables of a given restaurant",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function(){",
+									"    pm.response.to.have.status(200);",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/restaurants/{{restaurant_id}}/tables",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"restaurants",
+								"{{restaurant_id}}",
+								"tables"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE a specific customer (ID based)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function(){",
+									"    pm.response.to.have.status(200);",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/customers/{{customerId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"customers",
+								"{{customerId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE all customers",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function(){",
+									"    pm.response.to.have.status(200);",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/customers/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"customers",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete an existing restaurant",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function(){",
+									"    pm.response.to.have.status(200);",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/restaurants/{{restaurant_id}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"restaurants",
+								"{{restaurant_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete all restaurants",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function(){",
+									"    pm.response.to.have.status(200);",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/restaurants",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"restaurants"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "host",
+			"value": "http://localhost:3000",
+			"type": "string"
+		}
+	]
+}
